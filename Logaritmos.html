@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Educativo - Logaritmos y Curso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --primary-light: #4285f4;
+            --primary-dark: #0d47a1;
+            --secondary-color: #34a853;
+            --accent-color: #fbbc05;
+            --light-color: #f8f9fa;
+            --dark-color: #202124;
+            --gray-light: #dadce0;
+            --gray-medium: #5f6368;
+            --border-radius: 12px;
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 24px;
+            --spacing-lg: 32px;
+            --spacing-xl: 48px;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: var(--spacing-md) 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .logo {
+            padding: 0 var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-bottom: var(--spacing-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .logo p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            color: white;
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--accent-color);
+            padding-left: calc(var(--spacing-md) + 8px);
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: var(--spacing-lg);
+        }
+
+        .header {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md) var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h2 {
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+        }
+
+        .date {
+            color: var(--gray-medium);
+            font-weight: 500;
+        }
+
+        .content-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-md);
+            font-size: 1.5rem;
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-card h3 i {
+            color: var(--primary-light);
+        }
+
+        .history-text {
+            text-align: justify;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .highlight {
+            background-color: rgba(26, 115, 232, 0.1);
+            padding: var(--spacing-sm);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+            margin: var(--spacing-md) 0;
+        }
+
+        /* Equations Section */
+        .equation-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .equation-item {
+            background-color: #f8fafc;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            border: 1px solid var(--gray-light);
+            transition: transform 0.3s ease;
+        }
+
+        .equation-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .equation-item h4 {
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.1rem;
+        }
+
+        .equation {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.2rem;
+            text-align: center;
+            margin: var(--spacing-sm) 0;
+            padding: var(--spacing-sm);
+            background-color: white;
+            border-radius: 8px;
+            border: 1px dashed var(--gray-light);
+        }
+
+        .python-code {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            border-radius: 8px;
+            padding: var(--spacing-md);
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin-top: var(--spacing-sm);
+            font-size: 0.95rem;
+        }
+
+        .python-code .comment {
+            color: #75715e;
+        }
+
+        .python-code .function {
+            color: #66d9ef;
+        }
+
+        .python-code .number {
+            color: #ae81ff;
+        }
+
+        /* Calculator Section */
+        .calculator-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #e3f2fd 100%);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+            border: 2px solid var(--primary-light);
+        }
+
+        .calculator-title {
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+        }
+
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .calculator-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .input-group input {
+            padding: 12px 16px;
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+        }
+
+        .calc-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .calc-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .calc-btn.secondary {
+            background-color: var(--secondary-color);
+        }
+
+        .calc-btn.secondary:hover {
+            background-color: #2e7d32;
+        }
+
+        .calc-btn.clear {
+            background-color: #ea4335;
+        }
+
+        .calc-btn.clear:hover {
+            background-color: #c62828;
+        }
+
+        .calculator-result {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            color: var(--gray-medium);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-sm);
+            text-align: center;
+        }
+
+        .result-equation {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.3rem;
+            color: var(--gray-medium);
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .result-python {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            border-radius: 8px;
+            padding: var(--spacing-sm);
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            text-align: center;
+            margin-top: var(--spacing-md);
+        }
+
+        .calculator-info {
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-sm);
+            background-color: rgba(251, 188, 5, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .calculator-info p {
+            font-size: 0.9rem;
+            color: #5d4037;
+        }
+
+        /* Python Course */
+        .course-section {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .course-section h4 {
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .course-section p {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+        }
+
+        .feature {
+            background-color: rgba(52, 168, 83, 0.1);
+            color: var(--secondary-color);
+            padding: var(--spacing-sm);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                margin-bottom: var(--spacing-md);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .container {
+                flex-direction: column;
+            }
+            
+            .equation-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-code"></i> Python Educativo</h1>
+                <p>Explora el mundo de la programación</p>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#historia" class="nav-link active" data-tab="historia">
+                        <i class="fas fa-history"></i>
+                        <span>Historia del Logaritmo</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#logaritmos" class="nav-link" data-tab="logaritmos">
+                        <i class="fas fa-calculator"></i>
+                        <span>Evaluación de Logaritmos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#curso" class="nav-link" data-tab="curso">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Curso Python Principiantes</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h2 id="tab-title">Historia del Número Logaritmo</h2>
+                <div class="date">Julio 19, 2024</div>
+            </header>
+
+            <!-- Historia del Logaritmo -->
+            <section id="historia" class="content-card active-tab">
+                <h3><i class="fas fa-book-open"></i> Breve Historia del Logaritmo</h3>
+                
+                <div class="history-text">
+                    <p>El concepto de logaritmo fue desarrollado de forma independiente por John Napier (1550-1617) en Escocia y Joost Bürgi (1552-1632) en Suiza a principios del siglo XVII. Napier publicó su trabajo "Mirifici Logarithmorum Canonis Descriptio" en 1614, donde introdujo los logaritmos como una herramienta para simplificar cálculos complejos, especialmente en astronomía y navegación.</p>
+                    
+                    <div class="highlight">
+                        <p>La palabra "logaritmo" proviene del griego: <strong>logos</strong> (razón) y <strong>arithmos</strong> (número), significando esencialmente "número de razones". Los logaritmos transforman multiplicaciones en sumas, divisiones en restas, potencias en multiplicaciones y raíces en divisiones.</p>
+                    </div>
+                    
+                    <p>Henry Briggs (1561-1630) colaboró con Napier y desarrolló los logaritmos comunes (base 10), que se hicieron ampliamente utilizados en cálculos científicos y de ingeniería. Los logaritmos naturales (base e) fueron desarrollados más tarde, con la constante e descubierta por Jacob Bernoulli en 1683.</p>
+                    
+                    <p>La invención de los logaritmos revolucionó los cálculos matemáticos antes de la era de las calculadoras electrónicas, siendo la regla de cálculo (basada en logaritmos) una herramienta esencial para ingenieros y científicos durante más de 300 años.</p>
+                </div>
+                
+                <div class="highlight">
+                    <p><strong>Curiosidad:</strong> Los logaritmos son la operación inversa de la exponenciación. Si bˣ = y, entonces log_b(y) = x. Esta relación fundamental conecta dos de las operaciones matemáticas más importantes.</p>
+                </div>
+            </section>
+
+            <!-- Evaluación de Logaritmos -->
+            <section id="logaritmos" class="content-card">
+                <h3><i class="fas fa-superscript"></i> Evaluación de Logaritmos - 10 Ejercicios</h3>
+                <p>A continuación se presentan 10 ecuaciones con logaritmos extraídas del material de estudio:</p>
+                
+                <div class="equation-list">
+                    <!-- Ecuaciones del PDF -->
+                    <div class="equation-item">
+                        <h4>Ecuación 1</h4>
+                        <div class="equation">log₁₀(100) = 2</div>
+                        <p>En Python se calcularía como:</p>
+                        <div class="python-code">
+                            <span class="function">import</span> math<br>
+                            resultado = math.log10(100)<br>
+                            <span class="comment"># resultado: 2.0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="equation-item">
+                        <h4>Ecuación 2</h4>
+                        <div class="equation">logₑ(8) = ln(8) ≈ 2.0794415</div>
+                        <p>En Python se calcularía como:</p>
+                        <div class="python-code">
+                            <span class="function">import</span> math<br>
+                            resultado = math.log(8)<br>
+                            <span class="comment"># resultado: 2.0794415416798357</span>
+                        </div>
+                    </div>
+                    
+                    <div class="equation-item">
+                        <h4>Ecuación 3</h4>
+                        <div class="equation">log₂(16) = 4</div>
+                        <p>En Python se calcularía como:</p>
+                        <div class="python-code">
+                            <span class="function">import</span> math<br>
+                            resultado = math.log2(16)<br>
+                            <span class="comment"># resultado: 4.0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="equation-item">
+                        <h4>Ecuación 4</h4>
+                        <div class="equation">log₅(25) = 2</div>
+                        <p>En Python se calcularía como:</p>
+                        <div class="python-code">
+                            <span class="function">import</span> math<br>
+                            resultado = math.log(25, 5)<br>
+                            <span class="comment"># resultado: 2.0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="equation-item">
+                        <h4>Ecuación 5</h4>
+                        <div class="equation">e⁴ ≈ 54.59815</div>
+                        <p>En Python se calcularía como:</p>
+                        <div class="python-code">
+                            <span class="function">import</span> math<br>
+                            resultado = math.exp(4)<br>
+                            <span class="comment"># resultado: 54.598150033144236</span>
+                        </div>
+                    </div>
+                    
+                    <div class="equation-item">
+                        <h4>Ecuación 6</h4>
+                        <div class="equation">1/(2 + e⁴) ≈ 0.0176684</div>
+                        <p>En Python se calcularía como:</p>
+                        <div class="python-code">
+                            <span class="function">import</span> math<br>
+                            resultado = 1 / (2 + math.exp(4))<br>
+                            <span class="comment"># resultado: 0.017668382401067596</span>
+                        </div>
+                    </div>
+                    
+                    <div class="equation-item">
+                        <h4>Ecuación 7</h4>
+                        <div class="equation">e^(3/(2+3)) ≈ 1.8221188</div>
+                        <p>En Python se calcularía como:</p>
+                        <div class="python-code">
+                            <span class="function">import</span> math<br>
+                            resultado = math.exp(3 / (2 + 3))<br>
+                            <span class="comment"># resultado: 1.822118800390509</span>
+                        </div>
+                    </div>
+                    
+                    <div class="equation-item">
+                        <h4>Ecuación 8</h4>
+                        <div class="equation">√[2/(e^(2/5) + e²)] ≈ 0.4745555</div>
+                        <p>En Python se calcularía como:</p>
+                        <div class="python-code">
+                            <span class="function">import</span> math<br>
+                            resultado = math.sqrt(2 / (math.exp(2/5) + math.exp(2)))<br>
+                            <span class="comment"># resultado: 0.4745555162901739</span>
+                        </div>
+                    </div>
+                    
+                    <div class="equation-item">
+                        <h4>Ecuación 9</h4>
+                        <div class="equation">log(45/(3+9)) ≈ log(3.75)</div>
+                        <p>En Python se calcularía como:</p>
+                        <div class="python-code">
+                            <span class="function">import</span> math<br>
+                            resultado = math.log(45/(3+9))<br>
+                            <span class="comment"># resultado: 1.3217558399823195</span>
+                        </div>
+                    </div>
+                    
+                    <div class="equation-item">
+                        <h4>Ecuación 10</h4>
+                        <div class="equation">log₂(2³ + 4²) = log₂(8 + 16) = log₂(24)</div>
+                        <p>En Python se calcularía como:</p>
+                        <div class="python-code">
+                            <span class="function">import</span> math<br>
+                            resultado = math.log2(2**3 + 4**2)<br>
+                            <span class="comment"># resultado: 4.584962500721156</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Calculadora de Logaritmos -->
+                <div class="calculator-container">
+                    <h3 class="calculator-title"><i class="fas fa-calculator"></i> Calculadora de Logaritmos</h3>
+                    
+                    <div class="calculator">
+                        <div class="calculator-inputs">
+                            <div class="input-group">
+                                <label for="log-base">Base del logaritmo:</label>
+                                <input type="number" id="log-base" placeholder="Ej: 10 (dejar vacío para log natural)" step="any" min="0.0001">
+                                <small>Para logaritmo natural (base e), dejar vacío o escribir "e"</small>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="log-argument">Argumento (número):</label>
+                                <input type="number" id="log-argument" placeholder="Ej: 100" step="any" min="0.0001" value="100">
+                            </div>
+                            
+                            <div class="calculator-buttons">
+                                <button class="calc-btn" id="calculate-log">
+                                    <i class="fas fa-calculator"></i> Calcular Log
+                                </button>
+                                <button class="calc-btn secondary" id="calculate-ln">
+                                    <i class="fas fa-function"></i> Log Natural
+                                </button>
+                                <button class="calc-btn secondary" id="calculate-log10">
+                                    <i class="fas fa-hashtag"></i> Log Base 10
+                                </button>
+                                <button class="calc-btn secondary" id="calculate-log2">
+                                    <i class="fas fa-binary"></i> Log Base 2
+                                </button>
+                                <button class="calc-btn clear" id="clear-calculator">
+                                    <i class="fas fa-broom"></i> Limpiar
+                                </button>
+                                <button class="calc-btn" id="example-button">
+                                    <i class="fas fa-lightbulb"></i> Ejemplo
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="calculator-result">
+                            <div class="result-title">RESULTADO</div>
+                            <div class="result-value" id="result-value">---</div>
+                            <div class="result-equation" id="result-equation">logₓ(y) = ?</div>
+                            <div class="result-python" id="result-python">
+                                # Código Python aparecerá aquí
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="calculator-info">
+                        <p><strong>Nota:</strong> Esta calculadora utiliza las funciones matemáticas de JavaScript para calcular logaritmos. Para bases arbitrarias, se aplica la fórmula: logₐ(b) = log(b) / log(a)</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Curso Python -->
+            <section id="curso" class="content-card">
+                <h3><i class="fas fa-laptop-code"></i> Curso Python para Principiantes - Resumen</h3>
+                
+                <div class="course-section">
+                    <h4><i class="fas fa-star"></i> Importancia y Versatilidad</h4>
+                    <p>Python es uno de los lenguajes de programación más importantes y versátiles de la actualidad, utilizado por grandes empresas tecnológicas y organizaciones científicas. Este curso se presenta como una guía para aprender Python desde cero y destaca que dominar este lenguaje facilita posteriormente el aprendizaje de otros lenguajes de programación.</p>
+                </div>
+                
+                <div class="course-section">
+                    <h4><i class="fas fa-cogs"></i> Características Principales</h4>
+                    <p>Python es un lenguaje de propósito general y de alto nivel, caracterizado por ser fácil de aprender gracias a una sintaxis cercana al lenguaje humano. Además, es de tipado dinámico, lo que simplifica el manejo de variables; es orientado a objetos y funciona de forma interpretada, lo que facilita la detección y corrección de errores durante el desarrollo.</p>
+                    
+                    <div class="features">
+                        <div class="feature"><i class="fas fa-check-circle"></i> Sintaxis clara y legible</div>
+                        <div class="feature"><i class="fas fa-check-circle"></i> Tipado dinámico</div>
+                        <div class="feature"><i class="fas fa-check-circle"></i> Orientado a objetos</div>
+                        <div class="feature"><i class="fas fa-check-circle"></i> Interpretado</div>
+                        <div class="feature"><i class="fas fa-check-circle"></i> Multiplataforma</div>
+                        <div class="feature"><i class="fas fa-check-circle"></i> Gran biblioteca estándar</div>
+                    </div>
+                </div>
+                
+                <div class="course-section">
+                    <h4><i class="fas fa-briefcase"></i> Aplicaciones y Usos</h4>
+                    <p>Su alto valor laboral se debe a que es una habilidad altamente demandada y aplicable en casi cualquier profesión. Se utiliza para el desarrollo de páginas web, aplicaciones móviles y de escritorio, automatización de tareas, análisis de datos e inteligencia artificial. También se emplea en pruebas de software y, aunque no es su enfoque principal, en el desarrollo de videojuegos.</p>
+                </div>
+                
+                <div class="course-section">
+                    <h4><i class="fas fa-history"></i> Historia y Evolución</h4>
+                    <p>Python fue creado por Guido van Rossum, quien publicó su primera versión (0.9.0) en 1991 con el objetivo de desarrollar un lenguaje fácil de usar sin perder potencia. Python 1 apareció en 1994, Python 2 en el año 2000 con mejoras importantes como el soporte Unicode, y Python 3 en 2008, que introdujo cambios fundamentales que continúan vigentes.</p>
+                </div>
+                
+                <div class="course-section">
+                    <h4><i class="fas fa-download"></i> Instalación y Primeros Pasos</h4>
+                    <p>El proceso de instalación es sencillo: se descarga Python desde su página oficial y se instala con pocos pasos. Posteriormente, se introduce el uso básico de la consola para ejecutar instrucciones simples y comprender el funcionamiento del intérprete.</p>
+                </div>
+                
+                <div class="course-section">
+                    <h4><i class="fas fa-code"></i> Fundamentos del Lenguaje</h4>
+                    <p>Se explican los tipos de datos simples, fundamentales para que el programa sepa cómo tratar la información: texto (string), números enteros (int), números decimales (float) y valores booleanos (True y False), utilizados para la toma de decisiones. Las variables son espacios en memoria donde se almacenan datos que pueden reutilizarse y modificarse a lo largo del programa.</p>
+                    
+                    <div class="python-code">
+                        <span class="comment"># Ejemplo de tipos de datos en Python</span><br>
+                        texto = <span class="string">"Hola Mundo"</span>  <span class="comment"># string</span><br>
+                        entero = <span class="number">42</span>           <span class="comment"># int</span><br>
+                        decimal = <span class="number">3.14</span>        <span class="comment"># float</span><br>
+                        booleano = <span class="keyword">True</span>       <span class="comment"># bool</span><br><br>
+                        
+                        <span class="comment"># Concatenación con f-strings</span><br>
+                        nombre = <span class="string">"Ana"</span><br>
+                        edad = <span class="number">25</span><br>
+                        mensaje = <span class="function">f</span><span class="string">"Hola, me llamo {nombre} y tengo {edad} años"</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Manejo de pestañas
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentCards = document.querySelectorAll('.content-card');
+            const tabTitle = document.getElementById('tab-title');
+            
+            // Títulos para cada pestaña
+            const tabTitles = {
+                'historia': 'Historia del Número Logaritmo',
+                'logaritmos': 'Evaluación de Logaritmos',
+                'curso': 'Curso Python para Principiantes'
+            };
+            
+            // Función para cambiar de pestaña
+            function switchTab(tabId) {
+                // Remover clase activa de todos los enlaces y tarjetas
+                navLinks.forEach(link => link.classList.remove('active'));
+                contentCards.forEach(card => card.classList.remove('active-tab'));
+                
+                // Activar el enlace y la tarjeta correspondiente
+                document.querySelector(`.nav-link[data-tab="${tabId}"]`).classList.add('active');
+                document.getElementById(tabId).classList.add('active-tab');
+                
+                // Cambiar título
+                tabTitle.textContent = tabTitles[tabId];
+            }
+            
+            // Event listeners para los enlaces del menú
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
+                    
+                    // Animación suave al contenido
+                    document.getElementById(tabId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Inicializar con la primera pestaña activa
+            switchTab('historia');
+            
+            // Efecto de animación para las tarjetas de ecuaciones
+            const equationItems = document.querySelectorAll('.equation-item');
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            equationItems.forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(item);
+            });
+            
+            // CÓDIGO DE LA CALCULADORA DE LOGARITMOS
+            
+            // Elementos de la calculadora
+            const baseInput = document.getElementById('log-base');
+            const argumentInput = document.getElementById('log-argument');
+            const calculateLogBtn = document.getElementById('calculate-log');
+            const calculateLnBtn = document.getElementById('calculate-ln');
+            const calculateLog10Btn = document.getElementById('calculate-log10');
+            const calculateLog2Btn = document.getElementById('calculate-log2');
+            const clearCalculatorBtn = document.getElementById('clear-calculator');
+            const exampleBtn = document.getElementById('example-button');
+            const resultValue = document.getElementById('result-value');
+            const resultEquation = document.getElementById('result-equation');
+            const resultPython = document.getElementById('result-python');
+            
+            // Función para calcular logaritmo con cualquier base
+            function calculateLogarithm(base, argument) {
+                // Validación de entrada
+                if (!argument || argument <= 0) {
+                    showError("El argumento debe ser un número positivo");
+                    return null;
+                }
+                
+                // Si no hay base, calcular logaritmo natural
+                if (!base || base === 'e') {
+                    const result = Math.log(argument);
+                    return {
+                        result: result,
+                        base: 'e',
+                        argument: argument,
+                        type: 'natural'
+                    };
+                }
+                
+                // Validar base
+                if (base <= 0 || base === 1) {
+                    showError("La base debe ser positiva y diferente de 1");
+                    return null;
+                }
+                
+                // Calcular logaritmo con base arbitraria usando cambio de base
+                const result = Math.log(argument) / Math.log(base);
+                return {
+                    result: result,
+                    base: base,
+                    argument: argument,
+                    type: 'arbitrary'
+                };
+            }
+            
+            // Función para mostrar error
+            function showError(message) {
+                resultValue.textContent = "Error";
+                resultEquation.textContent = message;
+                resultPython.textContent = "# Error en el cálculo";
+                resultValue.style.color = "#ea4335";
+                
+                // Restaurar color después de 3 segundos
+                setTimeout(() => {
+                    resultValue.style.color = "";
+                }, 3000);
+            }
+            
+            // Función para mostrar resultado
+            function displayResult(logData) {
+                if (!logData) return;
+                
+                const { result, base, argument, type } = logData;
+                
+                // Mostrar resultado con 8 decimales
+                resultValue.textContent = result.toFixed(8);
+                resultValue.style.color = "#0d47a1";
+                
+                // Mostrar ecuación
+                if (type === 'natural') {
+                    resultEquation.textContent = `ln(${argument}) = ${result.toFixed(8)}`;
+                } else {
+                    // Usar subíndices para la base
+                    resultEquation.innerHTML = `log<sub>${base}</sub>(${argument}) = ${result.toFixed(8)}`;
+                }
+                
+                // Mostrar código Python correspondiente
+                let pythonCode = "";
+                if (type === 'natural') {
+                    pythonCode = `import math\nresultado = math.log(${argument})\n# resultado: ${result.toFixed(8)}`;
+                } else if (type === 'arbitrary') {
+                    pythonCode = `import math\nresultado = math.log(${argument}, ${base})\n# resultado: ${result.toFixed(8)}`;
+                }
+                resultPython.textContent = pythonCode;
+            }
+            
+            // Event Listeners para los botones de la calculadora
+            
+            // Calcular logaritmo con base personalizada
+            calculateLogBtn.addEventListener('click', function() {
+                const base = baseInput.value.trim();
+                const argument = parseFloat(argumentInput.value);
+                
+                const logData = calculateLogarithm(base === 'e' ? 'e' : parseFloat(base), argument);
+                displayResult(logData);
+            });
+            
+            // Calcular logaritmo natural
+            calculateLnBtn.addEventListener('click', function() {
+                const argument = parseFloat(argumentInput.value);
+                baseInput.value = 'e';
+                
+                const logData = calculateLogarithm('e', argument);
+                displayResult(logData);
+            });
+            
+            // Calcular logaritmo base 10
+            calculateLog10Btn.addEventListener('click', function() {
+                const argument = parseFloat(argumentInput.value);
+                baseInput.value = '10';
+                
+                const logData = calculateLogarithm(10, argument);
+                displayResult(logData);
+            });
+            
+            // Calcular logaritmo base 2
+            calculateLog2Btn.addEventListener('click', function() {
+                const argument = parseFloat(argumentInput.value);
+                baseInput.value = '2';
+                
+                const logData = calculateLogarithm(2, argument);
+                displayResult(logData);
+            });
+            
+            // Limpiar calculadora
+            clearCalculatorBtn.addEventListener('click', function() {
+                baseInput.value = '';
+                argumentInput.value = '100';
+                resultValue.textContent = '---';
+                resultEquation.textContent = 'logₓ(y) = ?';
+                resultPython.textContent = '# Código Python aparecerá aquí';
+                resultValue.style.color = '';
+            });
+            
+            // Ejemplo de uso
+            exampleBtn.addEventListener('click', function() {
+                baseInput.value = '10';
+                argumentInput.value = '1000';
+                
+                const logData = calculateLogarithm(10, 1000);
+                displayResult(logData);
+            });
+            
+            // Permitir calcular al presionar Enter en los campos
+            baseInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateLogBtn.click();
+                }
+            });
+            
+            argumentInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateLogBtn.click();
+                }
+            });
+            
+            // Inicializar con un ejemplo
+            window.addEventListener('load', function() {
+                // Mostrar un ejemplo inicial
+                baseInput.value = '10';
+                argumentInput.value = '100';
+                const logData = calculateLogarithm(10, 100);
+                displayResult(logData);
+            });
+        });
+    </script>
+</body>
+</html>
